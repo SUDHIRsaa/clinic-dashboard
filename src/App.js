@@ -13,8 +13,11 @@ import DoctorDetails from './pages/Doctors/DoctorDetails';
 import AddNurse from './pages/Nurses/AddNurse';
 import AllNurses from './pages/Nurses/AllNurses';
 import NurseDetails from './pages/Nurses/NurseDetails';
-import RoomAllotments from './pages/RoomAllotments';
+
 import BookAppointments from './pages/BookAppoinments'
+import RoomTable from './pages/Room&Ward/Room';
+import WardTable from './pages/Room&Ward/Ward';
+
 const App = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -41,7 +44,8 @@ const App = () => {
             <Route path="/nurses/add" element={<AddNurse />} />
             <Route path="/nurses/all" element={<AllNurses />} />
             <Route path="/nurses/details/" element={<NurseDetails />} />
-            <Route path="/room-allotments" element={<RoomAllotments />} />
+            <Route path="/room" element={<RoomTable />} />
+            <Route path="/wards" element={<WardTable />} />
             <Route path="/appointments/add" element={<BookAppointments />} />
             </Routes>
           </main>

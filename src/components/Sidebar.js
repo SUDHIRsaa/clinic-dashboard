@@ -54,8 +54,8 @@ const menuItems = [
     label: 'Room Allotments',
     icon: FaBed,
     subMenu: [
-      { label: 'Rooms', icon: FaBed, path: '/room-allotments/rooms' },
-      { label: 'Beds', icon: FaBed, path: '/room-allotments/beds' },
+      { label: 'Rooms', icon: FaBed, path: '/room' },
+      { label: 'Beds', icon: FaBed, path: '/wards' },
     ],
   },
   {

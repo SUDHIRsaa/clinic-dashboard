@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { FaUpload } from 'react-icons/fa';
 
 const AddNurse = () => {
   const [formData, setFormData] = useState({
     nurseId: '',
-    fullName: '',
-    phone: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    phoneNumber: '',
     email: '',
-    address: '',
-    gender: '',
-    profileImage: null,
+    department: '',
+    shift: '',
+    ward: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -21,18 +22,15 @@ const AddNurse = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, profileImage: e.target.files[0] });
-  };
-
   const validate = () => {
     const newErrors = {};
     if (!formData.nurseId) newErrors.nurseId = 'Nurse ID is required';
-    if (!formData.fullName) newErrors.fullName = 'Full Name is required';
-    if (!formData.phone) newErrors.phone = 'Phone number is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.address) newErrors.address = 'Address is required';
-    if (!formData.gender) newErrors.gender = 'Gender is required';
+    if (!formData.firstName) newErrors.firstName = 'First Name is required';
+    if (!formData.lastName) newErrors.lastName = 'Last Name is required';
+    if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone Number is required';
+    if (!formData.department) newErrors.department = 'Department is required';
+    if (!formData.shift) newErrors.shift = 'Shift is required';
+    if (!formData.ward) newErrors.ward = 'Ward is required';
 
     return newErrors;
   };
@@ -44,9 +42,10 @@ const AddNurse = () => {
       setSuccessMessage('Successfully Added Nurse!');
       setErrorMessage('');
       setErrors({});
+      // Add nurse submission logic here
     } else {
       setSuccessMessage('');
-      setErrorMessage('You should check in on some of those fields below.');
+      setErrorMessage('Please fill in the required fields.');
       setErrors(formErrors);
     }
   };
@@ -71,29 +70,54 @@ const AddNurse = () => {
             </div>
 
             <div>
-              <label className="block mb-2">Full Name</label>
+              <label className="block mb-2">First Name</label>
               <input
                 type="text"
-                name="fullName"
-                placeholder="Full Name"
+                name="firstName"
+                placeholder="First Name"
                 className="w-full p-2 border border-gray-300 rounded"
-                value={formData.fullName}
+                value={formData.firstName}
                 onChange={handleChange}
               />
-              {errors.fullName && <span className="text-red-500 text-sm">{errors.fullName}</span>}
+              {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName}</span>}
             </div>
 
             <div>
-              <label className="block mb-2">Phone</label>
+              <label className="block mb-2">Middle Name</label>
               <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
+                type="text"
+                name="middleName"
+                placeholder="Middle Name"
                 className="w-full p-2 border border-gray-300 rounded"
-                value={formData.phone}
+                value={formData.middleName}
                 onChange={handleChange}
               />
-              {errors.phone && <span className="text-red-500 text-sm">{errors.phone}</span>}
+            </div>
+
+            <div>
+              <label className="block mb-2">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+              {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName}</span>}
+            </div>
+
+            <div>
+              <label className="block mb-2">Phone Number</label>
+              <input
+                type="text"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+              />
+              {errors.phoneNumber && <span className="text-red-500 text-sm">{errors.phoneNumber}</span>}
             </div>
 
             <div>
@@ -106,46 +130,47 @@ const AddNurse = () => {
                 value={formData.email}
                 onChange={handleChange}
               />
-              {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block mb-2">Address</label>
-              <textarea
-                name="address"
-                placeholder="Address"
-                className="w-full p-2 border border-gray-300 rounded"
-                rows="3"
-                value={formData.address}
-                onChange={handleChange}
-              ></textarea>
-              {errors.address && <span className="text-red-500 text-sm">{errors.address}</span>}
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block mb-2">Profile Image</label>
-              <div className="flex items-center p-2 border border-gray-300 rounded">
-                <input type="file" className="hidden" id="file-upload" onChange={handleFileChange} />
-                <label htmlFor="file-upload" className="cursor-pointer flex items-center">
-                  <FaUpload className="mr-2" /> Upload Profile Image
-                </label>
-              </div>
             </div>
 
             <div>
-              <label className="block mb-2">Gender</label>
-              <select
-                name="gender"
+              <label className="block mb-2">Department</label>
+              <input
+                type="text"
+                name="department"
+                placeholder="Department"
                 className="w-full p-2 border border-gray-300 rounded"
-                value={formData.gender}
+                value={formData.department}
+                onChange={handleChange}
+              />
+              {errors.department && <span className="text-red-500 text-sm">{errors.department}</span>}
+            </div>
+
+            <div>
+              <label className="block mb-2">Shift</label>
+              <select
+                name="shift"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={formData.shift}
                 onChange={handleChange}
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="">Select Shift</option>
+                <option value="Day">Day</option>
+                <option value="Night">Night</option>
               </select>
-              {errors.gender && <span className="text-red-500 text-sm">{errors.gender}</span>}
+              {errors.shift && <span className="text-red-500 text-sm">{errors.shift}</span>}
+            </div>
+
+            <div>
+              <label className="block mb-2">Ward</label>
+              <input
+                type="text"
+                name="ward"
+                placeholder="Ward"
+                className="w-full p-2 border border-gray-300 rounded"
+                value={formData.ward}
+                onChange={handleChange}
+              />
+              {errors.ward && <span className="text-red-500 text-sm">{errors.ward}</span>}
             </div>
           </div>
 

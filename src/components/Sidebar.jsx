@@ -5,25 +5,20 @@ import {
   FaStethoscope,
   FaBed,
   FaChartBar,
-  FaChevronDown,
-  FaChevronUp,
   FaClipboardList,
   FaClipboardCheck,
   FaUserFriends,
   FaPills,
+  FaChevronDown,
+  FaChevronUp, // For dropdown toggle icons
 } from 'react-icons/fa';
+import { Box, Icon, List, ListItem, Text, VStack, Collapse, Flex } from '@chakra-ui/react';
 
-// Sidebar Menu Items
 const menuItems = [
-  {
-    label: 'Dashboard',
-    icon: FaChartBar,
-    path: '/',
-  },
+  { label: 'Dashboard', icon: FaChartBar, path: '/' },
   {
     label: 'Patients',
     icon: FaUser,
-    path: '/patients',
     subMenu: [
       { label: 'Add Patient', icon: FaUser, path: '/patients/add' },
       { label: 'All Patients', icon: FaUserFriends, path: '/patients/all' },
@@ -33,7 +28,6 @@ const menuItems = [
   {
     label: 'Doctors',
     icon: FaStethoscope,
-    path: '/doctors',
     subMenu: [
       { label: 'Add Doctor', icon: FaStethoscope, path: '/doctors/add' },
       { label: 'All Doctors', icon: FaStethoscope, path: '/doctors/all' },
@@ -43,10 +37,9 @@ const menuItems = [
   {
     label: 'Nurses',
     icon: FaUser,
-    path: '/nurses',
     subMenu: [
       { label: 'Add Nurse', icon: FaUser, path: '/nurses/add' },
-      { label: 'All Nurses', icon: FaUser, path: '/nurses/all' },
+      { label: 'All Nurses', icon: FaUserFriends, path: '/nurses/all' },
       { label: 'Nurse Details', icon: FaUser, path: '/nurses/details' },
     ],
   },
@@ -86,47 +79,48 @@ const menuItems = [
   },
 ];
 
-// Sidebar Dropdown Item Component
-const SidebarItem = ({ label, icon: Icon, path, subMenu, isCollapsed, isOpen, toggleOpen }) => (
-  <li>
+
+const SidebarItem = ({ label, icon: IconComponent, path, subMenu, isOpen, toggleOpen, isCollapsed }) => (
+  <ListItem>
     {subMenu ? (
-      <button
-        onClick={toggleOpen}
-        className="flex items-center justify-between w-full p-2 text-lg"
-      >
-        <div className="flex items-center space-x-3">
-          <Icon size={24} />
-          {!isCollapsed && <span>{label}</span>}
-        </div>
-        {!isCollapsed && (
-          <span>{isOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
-        )}
-      </button>
+      <>
+      
+        <Flex
+          justify="space-between"
+          align="center"
+          onClick={toggleOpen}
+          className="cursor-pointer"
+        >
+          <Flex align="center">
+            <Icon as={IconComponent} boxSize={6} />
+            {!isCollapsed && <Text fontSize="lg" ml={3}>{label}</Text>}
+          </Flex>
+          {!isCollapsed && (
+            <Icon as={isOpen ? FaChevronUp : FaChevronDown} boxSize={4} />
+          )}
+        </Flex>
+
+       
+        <Collapse in={isOpen} animateOpacity>
+          <List pl={6} mt={2}>
+            {subMenu.map((item, index) => (
+              <ListItem key={index} mb={2}>
+                <NavLink to={item.path} className="flex items-center space-x-2 text-sm">
+                  <Icon as={item.icon} boxSize={4} />
+                  {!isCollapsed && <Text ml={2}>{item.label}</Text>}
+                </NavLink>
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
+      </>
     ) : (
-      <NavLink
-        to={path}
-        className="flex items-center p-2 text-lg"
-      >
-        <Icon size={24} />
-        {!isCollapsed && <span className="ml-3">{label}</span>}
+      <NavLink to={path} className="flex items-center p-2 text-lg">
+        <Icon as={IconComponent} boxSize={6} />
+        {!isCollapsed && <Text ml={3}>{label}</Text>}
       </NavLink>
     )}
-    
-    {subMenu && isOpen && !isCollapsed && (
-      <ul className="pl-6 space-y-2 mt-2">
-        {subMenu.map((item, index) => (
-          <li key={index}>
-            <NavLink
-              to={item.path}
-              className="flex items-center space-x-2 text-sm"
-            >
-              <item.icon size={14} /> <span>{item.label}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    )}
-  </li>
+  </ListItem>
 );
 
 const Sidebar = ({ isCollapsed }) => {
@@ -137,24 +131,31 @@ const Sidebar = ({ isCollapsed }) => {
   };
 
   return (
-    <aside
-      className={`max-h-full bg-teal-600 p-4 text-white overflow-y-auto ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300`}
+    <Box
+      bg="white"
+      color="gray.700"
+      w={isCollapsed ? '75px' : '250px'}
+      h="h-screen"
+      shadow="lg"
+      p={5}
     >
-      <ul className="space-y-4">
-        {menuItems.map((menu, index) => (
-          <SidebarItem
-            key={index}
-            label={menu.label}
-            icon={menu.icon}
-            path={menu.path} // Pass the path here
-            subMenu={menu.subMenu}
-            isCollapsed={isCollapsed}
-            isOpen={openMenu[menu.label]}
-            toggleOpen={() => toggleMenu(menu.label)}
-          />
-        ))}
-      </ul>
-    </aside>
+      <VStack spacing={10}>
+        <List spacing={8}>
+          {menuItems.map((menu, index) => (
+            <SidebarItem
+              key={index}
+              label={menu.label}
+              icon={menu.icon}
+              path={menu.path}
+              subMenu={menu.subMenu}
+              isOpen={openMenu[menu.label]}
+              toggleOpen={() => toggleMenu(menu.label)}
+              isCollapsed={isCollapsed}
+            />
+          ))}
+        </List>
+      </VStack>
+    </Box>
   );
 };
 

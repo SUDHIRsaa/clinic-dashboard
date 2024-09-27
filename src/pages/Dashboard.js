@@ -1,13 +1,29 @@
 import React from 'react';
 import { FaUser, FaChartBar, FaDollarSign } from 'react-icons/fa';
 import {
+  Box,
+  Grid,
+  Heading,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  SimpleGrid,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+} from '@chakra-ui/react';
+import {
   LineChart,
   Line,
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
+  Tooltip as RechartsTooltip,
   PieChart,
   Pie,
   Cell,
@@ -44,26 +60,30 @@ const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
 
 // Reusable StatCard component
 const StatCard = ({ icon: Icon, title, value, change, color }) => (
-  <div className="bg-white shadow p-4 rounded">
-    <div className="flex items-center">
-      <div className={`w-12 h-12 flex justify-center items-center rounded-full ${color} text-white mr-3`}>
+  <Box bg="white" shadow="md" p={4} rounded="md">
+    <Box display="flex" alignItems="center">
+      <Box
+        className={`w-12 h-12 flex justify-center items-center rounded-full ${color} text-white mr-3`}
+      >
         <Icon className="text-2xl" />
-      </div>
-      <h2 className="text-xl">{title}</h2>
-    </div>
-    <p className="text-3xl font-bold">{value}</p>
-    <p className={change > 0 ? 'text-green-500' : 'text-red-500'}>
-      {change > 0 ? `+${change}% Increased` : `${change}% Decreased`}
-    </p>
-  </div>
+      </Box>
+      <Stat>
+        <StatLabel fontSize="lg">{title}</StatLabel>
+        <StatNumber fontSize="2xl" fontWeight="bold">{value}</StatNumber>
+        <StatHelpText color={change > 0 ? 'green.500' : 'red.500'}>
+          {change > 0 ? `+${change}% Increased` : `${change}% Decreased`}
+        </StatHelpText>
+      </Stat>
+    </Box>
+  </Box>
 );
 
 const Dashboard = () => {
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Quick Statistics</h1>
+    <Box p={4}>
+      <Heading size="lg" mb={4}>Quick Statistics</Heading>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={4}>
         {/* StatCards for Patients, Appointments, and Revenue */}
         <StatCard
           icon={FaUser}
@@ -86,83 +106,84 @@ const Dashboard = () => {
           change={10}
           color="bg-orange-500"
         />
-      </div>
+      </SimpleGrid>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-        <div className="bg-white shadow p-4 rounded">
-          <h2 className="text-xl mb-2">Appointments Year by Year</h2>
+      <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
+        <Box bg="white" shadow="md" p={4} rounded="md">
+          <Heading size="sm" mb={2}>Appointments Year by Year</Heading>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={lineData}>
               <Line type="monotone" dataKey="appointments" stroke="#FF69B4" />
               <XAxis dataKey="year" />
               <YAxis />
-              <Tooltip />
+              <RechartsTooltip />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </Box>
 
-        <div className="bg-white shadow p-4 rounded">
-          <h2 className="text-xl mb-2">Patients Year by Year</h2>
+        <Box bg="white" shadow="md" p={4} rounded="md">
+          <Heading size="sm" mb={2}>Patients Year by Year</Heading>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={barData}>
               <XAxis dataKey="year" />
               <YAxis />
-              <Tooltip />
+              <RechartsTooltip />
               <Bar dataKey="patients" fill="#FF8C00" />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-      </div>
+        </Box>
+      </Grid>
 
-      {/* Appointment and PieChart Section */}
-      <div className="mt-4 bg-white shadow p-4 rounded">
-        <h2 className="text-xl mb-2">Appointments</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
-            <thead>
-              <tr className="bg-gray-700">
-                <th className="px-4 py-2 border">Patient Name</th>
-                <th className="px-4 py-2 border">Doctor</th>
-                <th className="px-4 py-2 border">Check-Up</th>
-                <th className="px-4 py-2 border">Date</th>
-                <th className="px-4 py-2 border">Time</th>
-                <th className="px-4 py-2 border">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-4 py-2 border">Rajesh</td>
-                <td className="px-4 py-2 border">Manoj Kumar</td>
-                <td className="px-4 py-2 border">Dental</td>
-                <td className="px-4 py-2 border">12-10-2018</td>
-                <td className="px-4 py-2 border">12:10PM</td>
-                <td className="px-4 py-2 border text-green-500">Completed</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 border">Riya</td>
-                <td className="px-4 py-2 border">Daniel</td>
-                <td className="px-4 py-2 border">Ortho</td>
-                <td className="px-4 py-2 border">12-10-2018</td>
-                <td className="px-4 py-2 border">1:10PM</td>
-                <td className="px-4 py-2 border text-yellow-500">Pending</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 border">Siri</td>
-                <td className="px-4 py-2 border">Daniel</td>
-                <td className="px-4 py-2 border">Ortho</td>
-                <td className="px-4 py-2 border">12-10-2018</td>
-                <td className="px-4 py-2 border">1:30PM</td>
-                <td className="px-4 py-2 border text-red-500">Cancelled</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Appointment Table Section */}
+      <Box mt={4} bg="white" shadow="md" p={4} rounded="md">
+        <Heading size="sm" mb={2}>Appointments</Heading>
+        <Box overflowX="auto">
+          <Table variant="simple">
+            <Thead bg="gray.700">
+              <Tr>
+                <Th color="white">Patient Name</Th>
+                <Th color="white">Doctor</Th>
+                <Th color="white">Check-Up</Th>
+                <Th color="white">Date</Th>
+                <Th color="white">Time</Th>
+                <Th color="white">Status</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <Tr>
+                <Td>Rajesh</Td>
+                <Td>Manoj Kumar</Td>
+                <Td>Dental</Td>
+                <Td>12-10-2018</Td>
+                <Td>12:10 PM</Td>
+                <Td color="green.500">Completed</Td>
+              </Tr>
+              <Tr>
+                <Td>Riya</Td>
+                <Td>Daniel</Td>
+                <Td>Ortho</Td>
+                <Td>12-10-2018</Td>
+                <Td>1:10 PM</Td>
+                <Td color="yellow.500">Pending</Td>
+              </Tr>
+              <Tr>
+                <Td>Siri</Td>
+                <Td>Daniel</Td>
+                <Td>Ortho</Td>
+                <Td>12-10-2018</Td>
+                <Td>1:30 PM</Td>
+                <Td color="red.500">Cancelled</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Box>
+      </Box>
 
-      <div className="mt-4 flex flex-wrap gap-4">
-        <div className="bg-white shadow p-4 rounded flex-1">
-          <h2 className="text-xl mb-2">Appointments Status</h2>
+      {/* PieChart and Doctors Availability Section */}
+      <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4} mt={4}>
+        <Box bg="white" shadow="md" p={4} rounded="md">
+          <Heading size="sm" mb={2}>Appointments Status</Heading>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie data={pieData} dataKey="value" outerRadius={100} label>
@@ -170,44 +191,44 @@ const Dashboard = () => {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <RechartsTooltip />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </Box>
 
-        <div className="bg-white shadow p-4 rounded flex-1">
-          <h2 className="text-xl mb-2">Doctors Availability</h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full table-auto border-collapse">
-              <thead>
-                <tr className="bg-gray-700">
-                  <th className="px-4 py-2 border">Doctor</th>
-                  <th className="px-4 py-2 border">Speciality</th>
-                  <th className="px-4 py-2 border">Availability</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="px-4 py-2 border">Rajesh</td>
-                  <td className="px-4 py-2 border">Dental</td>
-                  <td className="px-4 py-2 border">Yes</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-2 border">Manoj Kumar</td>
-                  <td className="px-4 py-2 border">Ortho</td>
-                  <td className="px-4 py-2 border">Yes</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-2 border">Siri</td>
-                  <td className="px-4 py-2 border">Cardio</td>
-                  <td className="px-4 py-2 border">No</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+        <Box bg="white" shadow="md" p={4} rounded="md">
+          <Heading size="sm" mb={2}>Doctors Availability</Heading>
+          <Box overflowX="auto">
+            <Table variant="simple">
+              <Thead bg="gray.700">
+                <Tr>
+                  <Th color="white">Doctor</Th>
+                  <Th color="white">Speciality</Th>
+                  <Th color="white">Availability</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td>Rajesh</Td>
+                  <Td>Dental</Td>
+                  <Td>Yes</Td>
+                </Tr>
+                <Tr>
+                  <Td>Manoj Kumar</Td>
+                  <Td>Ortho</Td>
+                  <Td>Yes</Td>
+                </Tr>
+                <Tr>
+                  <Td>Siri</Td>
+                  <Td>Cardio</Td>
+                  <Td>No</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </Box>
+        </Box>
+      </Grid>
+    </Box>
   );
 };
 

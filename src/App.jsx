@@ -16,13 +16,14 @@ import BookAppointments from './pages/BookAppoinments';
 import RoomTable from './pages/Room&Ward/Room';
 import WardTable from './pages/Room&Ward/Ward';
 import { ChakraProvider } from '@chakra-ui/react';
-import AppointmentPage from './Doctor';
+import AppointmentPage from './pages/Doctors/Doctor';
+import Admit from './pages/Doctors/AdmitPage'
 
 const App = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed); // Toggle collapse state
+    setIsSidebarCollapsed(!isSidebarCollapsed); 
   };
 
   return (
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="/wards" element={<WardTable />} />
                 <Route path="/appointments/add" element={<BookAppointments />} />
                 <Route path='/doctors' element ={<AppointmentPage/>} />
+                <Route path='/admit' element ={<Admit/>} />
               </Routes>
             </main>
           </div>

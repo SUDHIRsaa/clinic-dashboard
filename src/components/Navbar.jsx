@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { 
   Flex, 
   Input, 
+  InputGroup, 
+  InputLeftElement, 
   IconButton, 
   Avatar, 
   Box, 
@@ -15,7 +17,8 @@ import {
   FaSun, 
   FaInfoCircle, 
   FaExpand, 
-  FaCompress 
+  FaCompress, 
+  FaSearch 
 } from 'react-icons/fa';
 
 const Navbar = ({ toggleSidebar }) => {
@@ -24,7 +27,6 @@ const Navbar = ({ toggleSidebar }) => {
   const bg = useColorModeValue('white', 'gray.800'); // Background color based on color mode
   const color = useColorModeValue('gray.800', 'white'); // Text color based on color mode
 
- 
   const toggleFullScreen = () => {
     if (!isFullscreen) {
       document.documentElement.requestFullscreen();
@@ -45,7 +47,6 @@ const Navbar = ({ toggleSidebar }) => {
       rounded="full"
       mx={4}
     >
-     
       <IconButton
         icon={<FaBars />}
         onClick={toggleSidebar}
@@ -56,14 +57,25 @@ const Navbar = ({ toggleSidebar }) => {
       />
 
      
-      <Box flex="1" mx={3}>
-        <Input
-          placeholder="Search..."
-          variant="filled"
-          borderRadius="full"
-          focusBorderColor={useColorModeValue('blue.200', 'blue.600')}
-          size="sm" 
-        />
+      <Box ml={550} flex="1" >
+        <InputGroup size="sm">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<FaSearch color={useColorModeValue('gray.500', 'gray.300')} />}
+          />
+          <Input
+            
+            w={400}
+            placeholder="Search..."
+            variant="filled"
+            color={"white"}
+            borderRadius="20"
+            paddingX="4"
+            paddingY="2"
+            focusBorderColor={useColorModeValue('blue.200', 'blue.600')}
+            size="sm" 
+          />
+        </InputGroup>
       </Box>
 
       <Flex align="center">
@@ -82,7 +94,6 @@ const Navbar = ({ toggleSidebar }) => {
           mx={1}
         />
 
-       
         <IconButton
           icon={colorMode === 'light' ? <FaMoon /> : <FaSun />}
           onClick={toggleColorMode}
@@ -92,7 +103,6 @@ const Navbar = ({ toggleSidebar }) => {
           mx={1}
         />
 
-    
         <IconButton
           icon={isFullscreen ? <FaCompress /> : <FaExpand />}
           onClick={toggleFullScreen}
@@ -102,7 +112,6 @@ const Navbar = ({ toggleSidebar }) => {
           mx={1}
         />
 
-      
         <Avatar
           src="https://via.placeholder.com/40"
           size="sm" 

@@ -17,39 +17,16 @@ import {
   Td,
 } from '@chakra-ui/react';
 import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip as RechartsTooltip,
   PieChart,
   Pie,
   Cell,
   ResponsiveContainer,
+  Tooltip as RechartsTooltip,
 } from 'recharts';
+import PatientDetails from './Patients/PatientDetails';
+import AllPatients from './Patients/AllPatients';
 
 // Sample data
-const lineData = [
-  { year: '2016 Q1', appointments: 20 },
-  { year: '2016 Q2', appointments: 15 },
-  { year: '2016 Q3', appointments: 40 },
-  { year: '2016 Q4', appointments: 25 },
-  { year: '2017 Q1', appointments: 35 },
-  { year: '2017 Q2', appointments: 50 },
-  { year: '2018 Q1', appointments: 65 },
-];
-
-const barData = [
-  { year: '2012', patients: 15 },
-  { year: '2013', patients: 30 },
-  { year: '2014', patients: 60 },
-  { year: '2015', patients: 45 },
-  { year: '2016', patients: 25 },
-  { year: '2017', patients: 35 },
-];
-
 const pieData = [
   { name: 'Completed', value: 45 },
   { name: 'Pending', value: 25 },
@@ -84,7 +61,6 @@ const Dashboard = () => {
       <Heading size="lg" mb={4}>Quick Statistics</Heading>
 
       <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={4}>
-        {/* StatCards for Patients, Appointments, and Revenue */}
         <StatCard
           icon={FaUser}
           title="Patients"
@@ -108,34 +84,7 @@ const Dashboard = () => {
         />
       </SimpleGrid>
 
-      {/* Charts Section */}
-      <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={4} mt={4}>
-        <Box bg="white" shadow="md" p={4} rounded="md">
-          <Heading size="sm" mb={2}>Appointments Year by Year</Heading>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={lineData}>
-              <Line type="monotone" dataKey="appointments" stroke="#FF69B4" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <RechartsTooltip />
-            </LineChart>
-          </ResponsiveContainer>
-        </Box>
-
-        <Box bg="white" shadow="md" p={4} rounded="md">
-          <Heading size="sm" mb={2}>Patients Year by Year</Heading>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={barData}>
-              <XAxis dataKey="year" />
-              <YAxis />
-              <RechartsTooltip />
-              <Bar dataKey="patients" fill="#FF8C00" />
-            </BarChart>
-          </ResponsiveContainer>
-        </Box>
-      </Grid>
-
-      {/* Appointment Table Section */}
+ 
       <Box mt={4} bg="white" shadow="md" p={4} rounded="md">
         <Heading size="sm" mb={2}>Appointments</Heading>
         <Box overflowX="auto">

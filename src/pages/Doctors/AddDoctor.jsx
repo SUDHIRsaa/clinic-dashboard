@@ -11,8 +11,10 @@ import {
   Text,
   IconButton,
   useToast,
+  HStack,
+  Icon,
 } from '@chakra-ui/react';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaClock, FaPlus, FaEye, FaSave } from 'react-icons/fa';
 
 const AddDoctor = () => {
   const [formData, setFormData] = useState({
@@ -101,45 +103,53 @@ const AddDoctor = () => {
   const renderSlots = () => (
     <Box mt={4}>
       {slots.map((slot, index) => (
-        <Flex key={index} mb={2} alignItems="center">
-          <Select
-            placeholder="Start Minute"
-            value={slot.startMinute}
-            onChange={(e) => handleSlotChange(index, 'startMinute', e.target.value)}
-            width="100px"
-          >
-            {[0, 15, 30, 45].map((minute) => (
-              <option key={minute} value={minute}>
-                {minute < 10 ? `0${minute}` : minute}
-              </option>
-            ))}
-          </Select>
-          <Text mx={2}>to</Text>
-          <Select
-            placeholder="End Minute"
-            value={slot.endMinute}
-            onChange={(e) => handleSlotChange(index, 'endMinute', e.target.value)}
-            width="100px"
-          >
-            {[0, 15, 30, 45].map((minute) => (
-              <option key={minute} value={minute}>
-                {minute < 10 ? `0${minute}` : minute}
-              </option>
-            ))}
-          </Select>
+        <Flex key={index} mb={4} alignItems="center" justifyContent="space-between">
+          <HStack spacing={4} flex="1">
+            <Icon as={FaClock} color="blue.500" />
+            <Select
+              placeholder="Start Minute"
+              value={slot.startMinute}
+              onChange={(e) => handleSlotChange(index, 'startMinute', e.target.value)}
+              width="100%"
+            >
+              {[0, 15, 30, 45].map((minute) => (
+                <option key={minute} value={minute}>
+                  {minute < 10 ? `0${minute}` : minute}
+                </option>
+              ))}
+            </Select>
+            <Text>to</Text>
+            <Select
+              placeholder="End Minute"
+              value={slot.endMinute}
+              onChange={(e) => handleSlotChange(index, 'endMinute', e.target.value)}
+              width="100%"
+            >
+              {[0, 15, 30, 45].map((minute) => (
+                <option key={minute} value={minute}>
+                  {minute < 10 ? `0${minute}` : minute}
+                </option>
+              ))}
+            </Select>
+          </HStack>
           <IconButton
             icon={<FaTrash />}
             onClick={() => removeSlot(index)}
             aria-label="Remove Slot"
             variant="outline"
             colorScheme="red"
-            ml={2}
+            ml={4}
           />
         </Flex>
       ))}
-      <Button mt={2} onClick={addSlot} variant="link" colorScheme="blue">
-        Add Slot
-      </Button>
+      <Flex justifyContent="space-between" alignItems="center" mt={4}>
+        <Button leftIcon={<FaPlus />} onClick={addSlot} colorScheme="blue">
+          Add Slot
+        </Button>
+        <Button leftIcon={<FaEye />} onClick={() => setShowPreview(true)} colorScheme="blue">
+          Preview Schedule
+        </Button>
+      </Flex>
     </Box>
   );
 
@@ -157,20 +167,34 @@ const AddDoctor = () => {
               <Text fontWeight="bold" mb={2}>
                 {day} - Slots:
               </Text>
-              {slots.map((slot, index) => (
-                <Text key={index}>
-                  {slot.startMinute !== null ? `${slot.startMinute}` : 'N/A'} - {slot.endMinute !== null ? `${slot.endMinute}` : 'N/A'}
-                </Text>
-              ))}
+              <Flex direction="row" wrap="wrap" justifyContent="space-around">
+                {slots.map((slot, index) => (
+                  <HStack
+                    key={index}
+                    spacing={3}
+                    bg="gray.100"
+                    p={4}
+                    rounded="md"
+                    mb={2}
+                    width="fit-content"
+                  >
+                    <Icon as={FaClock} color="green.500" />
+                    <Text>
+                      {slot.startMinute !== null ? `${slot.startMinute}` : 'N/A'} -{' '}
+                      {slot.endMinute !== null ? `${slot.endMinute}` : 'N/A'}
+                    </Text>
+                  </HStack>
+                ))}
+              </Flex>
             </Box>
           ))
         ) : (
           <Text>No days selected</Text>
         )}
-        <Button mt={4} colorScheme="blue" onClick={handleSave}>
+        <Button leftIcon={<FaSave />} mt={4} colorScheme="blue" onClick={handleSave}>
           Save Schedule
         </Button>
-        <Button mt={4} colorScheme="blue" onClick={() => setShowPreview(false)}>
+        <Button leftIcon={<FaEye />} mt={4} ml={5} colorScheme="blue" onClick={() => setShowPreview(false)}>
           Back
         </Button>
       </Box>
@@ -178,11 +202,12 @@ const AddDoctor = () => {
   };
 
   return (
-    <VStack spacing={0} p={8} bg="gray.100">
-      <Box bg="white" p={8} boxShadow="md" rounded="md" width="100%" h="screen">
+    <VStack spacing={4} p={8} bg="gray.100" minH="100vh">
+      <Box bg="white" p={8} boxShadow="md" rounded="md" width="100%">
         {!showSlots ? (
           <form onSubmit={handleSubmit}>
             <VStack spacing={4}>
+              {/* Form fields */}
               <FormControl isInvalid={errors.doctorId}>
                 <FormLabel>Doctor ID</FormLabel>
                 <Input
@@ -264,33 +289,33 @@ const AddDoctor = () => {
                 {errors.gender && <Text color="red.500">{errors.gender}</Text>}
               </FormControl>
 
-              <Button type="submit" colorScheme="blue">Next</Button>
+              <Button colorScheme="blue" type="submit">
+                Submit
+              </Button>
             </VStack>
           </form>
         ) : showPreview ? (
-          <Box className='h-screen'>
-            {renderPreview()}
-          </Box>
+          renderPreview()
         ) : (
-          <Box className='h-screen'>
-            <Text fontSize="lg" fontWeight="bold">Select Days</Text>
-            <Flex mt={4}>
+          <Box>
+            <Text fontSize="lg" fontWeight="bold" mb={4}>
+              Select Available Days
+            </Text>
+            <Flex wrap="wrap" justify="space-between">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
                 <Button
                   key={index}
-                  onClick={() => handleDayToggle(index)}
                   colorScheme={days[index] ? 'green' : 'gray'}
-                  variant="solid"
-                  mx={1}
+                  onClick={() => handleDayToggle(index)}
+                  width="calc(33.33% - 4px)"
+                  mb={2}
+                  p={4}
                 >
                   {day}
                 </Button>
               ))}
             </Flex>
             {renderSlots()}
-            <Button mt={4} colorScheme="blue" onClick={() => setShowPreview(true)}>
-              Preview Schedule
-            </Button>
           </Box>
         )}
       </Box>
